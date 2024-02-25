@@ -15,12 +15,20 @@ export interface AlertMessage {
     message: "success" | "fail" | "duplicate"
 }
 
+export interface deleteStateType {
+    state: boolean,
+    cardId: string
+  }
+
+export const nullFunction = () => {
+    console.log("This is null function.");
+    
+}
 
 
 const checkIfTitleExists = (newTitle: string, itemList: NewItem[]): boolean => {
     return itemList.some((item) => (item.title.includes(newTitle)) ? true : false)
 }
-
 
 
 export const getFromStorage = (): NewItem[] => {
@@ -57,23 +65,30 @@ export const saveToStorage = (newItemTitle: string): AlertMessage => {
 }
 
 
-export const deleteFromStorage = (taskId: string): void => {
-    console.log("delete");
+export const deleteFromStorage = (itemId: string): void => { 
 
-    let storage: NewItem[] | null = getFromStorage();
-
-
+    let storage: NewItem[] | null = getFromStorage(); 
     storage = storage.filter((task: NewItem): boolean => {
-        return task.id === taskId
+        return task.id !== itemId
     });
 
     localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(storage))
+}
 
+export const editItemToStroage = (itemId: string, editedValue: string): void => {
+    console.log(itemId, editedValue);
+    
+    const storage = getFromStorage();
+    let item = storage.find(item => item.id === itemId);
+    
+    // (item) ? item.title = editedValue : null;
 
-
-    // document.getElementById(taskId).remove(); 
-    // updateTaskToLocalstorage(tasks);
-
+    if(item) {
+        item.title = editedValue
+    }
+    
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(storage))
+    
 }
 
 
