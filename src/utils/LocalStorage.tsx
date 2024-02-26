@@ -3,7 +3,8 @@
 //** GOLBALS **// 
 const LOCALSTORAGE_KEY: string = "TODOLIST";
 const LOCALSTORAGE_DROP_KEY: string = "DROPLIST";
-const WEEKDAYS_ARRAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+// const WEEKDAYS_ARRAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS_ARRAY = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export interface NewItem {
