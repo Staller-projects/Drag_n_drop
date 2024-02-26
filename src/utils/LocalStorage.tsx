@@ -3,11 +3,14 @@
 //** GOLBALS **// 
 const LOCALSTORAGE_KEY: string = "TODOLIST";
 const LOCALSTORAGE_DROP_KEY: string = "DROPLIST";
+const WEEKDAYS_ARRAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS_ARRAY = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export interface NewItem {
     id: string,
     title: string,
     complete: boolean,
+    completeTill: string,
     position: "TODO" | "DONE"
 }
 
@@ -37,16 +40,36 @@ export const getFromStorage = (): NewItem[] => {
     return (storage != null) ? JSON.parse(storage) : null;
 }
 
-export const saveToStorage = (newItemTitle: string): AlertMessage => {
+export const formatDateAndTime = (inputDate: string): string => {
+    
+    const selectedDate = new Date(inputDate);
+    const month = MONTHS_ARRAY[selectedDate.getMonth()];
+    const date = selectedDate.getDate();
+
+    return `${month}, ${date}`; 
+}
+
+export const findDiffOfGivenDateAndToday = (date: string): number => {
+    const todaysDate = new Date(); 
+    const givenDate = new Date(`2024 ${date}`);
+    const diffTime = (givenDate.valueOf() - todaysDate.valueOf());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+    return (diffDays === -0 || diffDays === 0) ? 0 : Number(diffDays);
+}
+
+export const saveToStorage = (newItemTitle: string, inputDate: string): AlertMessage => {
 
     const storage: NewItem[] | null = getFromStorage();
     const newItem: NewItem = {
         id: `_task${Date.now()}`,
         title: newItemTitle,
         complete: false,
-        position: "TODO"
+        completeTill: formatDateAndTime(inputDate), 
+        position: "TODO",
     }
 
+    
 
 
     if (storage == null) {
@@ -62,6 +85,8 @@ export const saveToStorage = (newItemTitle: string): AlertMessage => {
 
         return { message: 'duplicate' } 
     } 
+
+    return { message: 'success' }
 }
 
 

@@ -20,30 +20,27 @@ const DnDLayout: React.FC = () => {
   const [undoCounter, setUndoCounter] = useState(4); 
 
 
- 
-
-  useEffect(() => {
-    console.log(undoCounter);
-  }, [undoCounter])
 
   useEffect(() => {     // initially, if the items are in the storage it will displayed. 
     displayItems();
   }, [])
 
-  useEffect(() => {
+  useEffect(() => {   // when delete icon is clicked, deleteCard.state will become 'true', at that time triggerDeleteCard() will call.
+  
     if (deleteCard.state) {
       triggerDeleteCard();
     }
-
-  }, [deleteCard.state])
+ 
+  // eslint-disable-next-line
+  }, [deleteCard])
 
 
   const displayItems = () => {     // get items form the storage and set data into ItemsList and then iteration and all happens
     setItemsList(getFromStorage());
   }
 
-  const handleOnEnter = (inputTitle: string) => {     // When something is written and enter is pressed this method is called.
-    const response: AlertMessage = saveToStorage(inputTitle);
+  const handleOnEnter = (inputTitle: string, inputDate: string) => {     // When something is written and enter is pressed this method is called.
+    const response: AlertMessage = saveToStorage(inputTitle, inputDate);
     (response.message === "duplicate") ? setAlertMessage("Duplicate entries not allowed!") : displayItems();
     setTimeout(() => {
       setAlertMessage('')
@@ -56,6 +53,19 @@ const DnDLayout: React.FC = () => {
     saveToDropStorage(cardItem, position);
     displayItems();
   }
+
+  // const triggerDeleteCard = useCallback(() => {
+  //   // Delete card logic here
+  //   const toBeDeleteCard = document.getElementById(`itemCard${deleteCard.cardId}`); 
+  
+  //   (toBeDeleteCard != null) ? setToBeDeleteCard(toBeDeleteCard) : nullFunction(); 
+  //   toBeDeleteCard?.classList.toggle('hidden');
+  //   changeUndoCounter();    
+  
+  //   InitiateDeleteItemTimer();    
+  // }, []);
+
+  
 
 
   const triggerDeleteCard = () => {
@@ -129,7 +139,7 @@ const DnDLayout: React.FC = () => {
           : null
       }
       </div>
-      <div className="w-[75%] space-y-4 mx-auto p-2">
+      <div className="w-[60%] space-y-4 mx-auto p-2">
 
         <div className="">
           <Input onEnter={handleOnEnter} placeHolder='Add the items here...' />
@@ -147,7 +157,7 @@ const DnDLayout: React.FC = () => {
               {
                 itemsList?.map((item, index) => {
                   return (item.position === "TODO") ?
-                    (<Card key={index} id={item.id}  setDeleteCard={setDeleteCard} completeState={item.complete} title={item.title} cardItem={JSON.stringify(item)} className={''} />)
+                    (<Card key={index} id={item.id} setDeleteCard={setDeleteCard} completeState={item.complete} title={item.title} cardItem={JSON.stringify(item)} className={''} />)
                     : null
                 })
               }
