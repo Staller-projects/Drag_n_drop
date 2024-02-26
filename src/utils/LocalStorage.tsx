@@ -70,9 +70,6 @@ export const saveToStorage = (newItemTitle: string, inputDate: string): AlertMes
         position: "TODO",
     }
 
-    
-
-
     if (storage == null) {
         localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([newItem]));
         return { message: 'success' }
@@ -85,9 +82,7 @@ export const saveToStorage = (newItemTitle: string, inputDate: string): AlertMes
         }
 
         return { message: 'duplicate' } 
-    } 
-
-    return { message: 'success' }
+    }  
 }
 
 
