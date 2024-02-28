@@ -8,7 +8,7 @@ import { saveToStorage, getFromStorage, NewItem, saveToDropStorage, deleteFromSt
 
 
 
-const DnDLayout: React.FC = () => {
+const DnDLayout = () => {
 
   // DECLERATIONS 
   const [toBeDeleteCard, setToBeDeleteCard] = useState<HTMLElement | null>(null); 
@@ -46,62 +46,43 @@ const DnDLayout: React.FC = () => {
       setAlertMessage('')
     }, 3000)
   }
-
+ 
 
   const handleOnDropEvent = (e: React.DragEvent, position: string) => {       // when card is droppe,  the data of the card will get and set to new place
     const cardItem = JSON.parse(e.dataTransfer.getData('cardDataToBeTransferred'));
     saveToDropStorage(cardItem, position);
     displayItems();
-  }
-
-  // const triggerDeleteCard = useCallback(() => {
-  //   // Delete card logic here
-  //   const toBeDeleteCard = document.getElementById(`itemCard${deleteCard.cardId}`); 
-  
-  //   (toBeDeleteCard != null) ? setToBeDeleteCard(toBeDeleteCard) : nullFunction(); 
-  //   toBeDeleteCard?.classList.toggle('hidden');
-  //   changeUndoCounter();    
-  
-  //   InitiateDeleteItemTimer();    
-  // }, []);
-
-  
-
-
-  const triggerDeleteCard = () => {
-    
-    const toBeDeleteCard = document.getElementById(`itemCard${deleteCard.cardId}`); 
+  } 
  
+
+  const triggerDeleteCard = () => {       // when user clicks the delete icon, this function starts the delete functionality
+    const toBeDeleteCard = document.getElementById(`itemCard${deleteCard.cardId}`);  
     (toBeDeleteCard != null) ? setToBeDeleteCard(toBeDeleteCard) : nullFunction(); 
     toBeDeleteCard?.classList.toggle('hidden');
-    changeUndoCounter();    
-
-    InitiateDeleteItemTimer();    
-
+    changeUndoCounter();     
+    InitiateDeleteItemTimer();     
   }
 
-  const InitiateDeleteItemTimer = () => {
+  
+  const InitiateDeleteItemTimer = () => {         // when the Item is delete the the timer is set to 5 sec and after 5 sec it will automaticcally deleted
     const deleteCardTimeout = setTimeout(() => { 
       deleteFromStorage(deleteCard.cardId);
       console.log("this is timeour");
-      resetUndoVariables();
-
-    }, 5000);     
- 
+      resetUndoVariables(); 
+    }, 5000);      
     setUndoDeleteTimeout(Number(deleteCardTimeout));
   }
 
-  const changeUndoCounter = () => {
-    
+
+  const changeUndoCounter = () => { 
     const undoCounterInterval = setInterval(() => { 
       setUndoCounter((prevCount) => prevCount-1);  
-    }, 1000)
-
+    }, 1000);  
     setUndoCounterInterval(Number(undoCounterInterval));
   }
 
-
-  const resetUndoVariables = () => {
+ 
+  const resetUndoVariables = () => {      // Reset all the variables which is being used by Undo functionality
     clearTimeout(undoDeleteTimeout);
     clearInterval(undoCounterInterval); 
     setUndoCounter(4);

@@ -2,9 +2,7 @@
 
 //** GOLBALS **// 
 const LOCALSTORAGE_KEY: string = "TODOLIST";
-const LOCALSTORAGE_DROP_KEY: string = "DROPLIST";
-
-// const WEEKDAYS_ARRAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const LOCALSTORAGE_DROP_KEY: string = "DROPLIST"; 
 const MONTHS_ARRAY = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export interface NewItem {
@@ -30,17 +28,16 @@ export const nullFunction = () => {
 }
 
 
-const checkIfTitleExists = (newTitle: string, itemList: NewItem[]): boolean => {
-    return itemList.some((item) => (item.title.includes(newTitle)) ? true : false)
-}
 
 
+// get data from local-storage
 export const getFromStorage = (): NewItem[] => {
 
     const storage: string | null = localStorage.getItem(LOCALSTORAGE_KEY);
     return (storage != null) ? JSON.parse(storage) : null;
 }
 
+// change the format of the given string date to displayable date  e.g. [Feb, 15] 
 export const formatDateAndTime = (inputDate: string): string => {
     
     const selectedDate = new Date(inputDate);
@@ -50,6 +47,7 @@ export const formatDateAndTime = (inputDate: string): string => {
     return `${month}, ${date}`; 
 }
 
+// this will find the difference between two dates
 export const findDiffOfGivenDateAndToday = (date: string): number => {
     const todaysDate = new Date(); 
     const givenDate = new Date(`2024 ${date}`);
@@ -59,8 +57,13 @@ export const findDiffOfGivenDateAndToday = (date: string): number => {
     return (diffDays === -0 || diffDays === 0) ? 0 : Number(diffDays);
 }
 
-export const saveToStorage = (newItemTitle: string, inputDate: string): AlertMessage => {
+// It will check the item is already exists
+const checkIfTitleExists = (newTitle: string, itemList: NewItem[]): boolean => {
+    return itemList.some((item) => !!item.title.includes(newTitle))
+}
 
+// save the new item to local-storage
+export const saveToStorage = (newItemTitle: string, inputDate: string): AlertMessage => { 
     const storage: NewItem[] | null = getFromStorage();
     const newItem: NewItem = {
         id: `_task${Date.now()}`,
@@ -70,6 +73,8 @@ export const saveToStorage = (newItemTitle: string, inputDate: string): AlertMes
         position: "TODO",
     }
 
+    // if storage is empty then it will create the new array and then store
+    // const data = 
     if (storage == null) {
         localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([newItem]));
         return { message: 'success' }
@@ -83,31 +88,30 @@ export const saveToStorage = (newItemTitle: string, inputDate: string): AlertMes
 
         return { message: 'duplicate' } 
     }  
+
+
 }
 
-
+// here, delete the item from storage
 export const deleteFromStorage = (itemId: string): void => { 
 
     let storage: NewItem[] | null = getFromStorage(); 
     storage = storage.filter((task: NewItem): boolean => {
         return task.id !== itemId
-    });
-
+    }); 
     localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(storage))
 }
 
+// edit the item from the storage
 export const editItemToStroage = (itemId: string, editedValue: string): void => {
     console.log(itemId, editedValue);
     
     const storage = getFromStorage();
     let item = storage.find(item => item.id === itemId);
     
-    // (item) ? item.title = editedValue : null;
-
     if(item) {
         item.title = editedValue
-    }
-    
+    } 
     localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(storage))
     
 }
