@@ -1,13 +1,60 @@
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap");
 
 body {
-    background-color: #1F2937;
+  /* background-color: #1F2937;  */
+  overflow: hidden;
+  background-image: url("/public/board.jpg");
+  background-repeat: no-repeat;
+  
+}
+
+.card-container-bg {
+  background: #acb6e5;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #86fde8, #acb6e5);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #86fde8, #acb6e5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.font-kalam {
+  font-family: "Kalam", cursive;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ffffff00;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #dcf2f1;
+}
+
+.date-input[type="date"]::-webkit-input-placeholder {
+  color: #999; /* Placeholder text color */
+}
+
+.date-input[type="date"]::-moz-placeholder {
+  color: #999; /* Placeholder text color */
+}
+
+.date-input[type="date"]:-ms-input-placeholder {
+  color: #999; /* Placeholder text color */
+}
+
+.date-input[type="date"]::placeholder {
+  color: #999; /* Placeholder text color */
 }
 
 .date-input {
-    color-scheme: dark;
+  color-scheme: dark;
 }
